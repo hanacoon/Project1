@@ -4,6 +4,7 @@ import os
 import filecmp
 from dateutil.relativedelta import *
 from datetime import date
+import collections
 
 
 def getData(file):
@@ -32,7 +33,7 @@ def getData(file):
 		dictObject["First"] = first_
 		dictObject["Last"] = last_
 		dictObject["Email"] = email_
-		dictObject["Course"] = class_
+		dictObject["Class"] = class_
 		dictObject["DOB"] = dob_
 		dictList.append(dictObject)
 
@@ -41,37 +42,60 @@ def getData(file):
 	return dictList
 
 def mySort(data,col):
-
 	sortedList = sorted(data, key=lambda k: k[col])
 	toReturn = sortedList[0].get("First") + " " + sortedList[0].get("Last")
 	return toReturn
 
 
 def classSizes(data):
-# Create a histogram
-# Input: list of dictionaries
-# Output: Return a list of tuples sorted by the number of students in that class in
-# descending order
-# [('Senior', 26), ('Junior', 25), ('Freshman', 21), ('Sophomore', 18)]
+	i = 0
+	seniors = 0
+	juniors = 0
+	sophomores = 0
+	freshmen = 0
+	while i < len(data):
+		if data[i].get("Class") == 'Senior':
+			seniors = seniors + 1
+		elif data[i].get("Class") == 'Junior':
+			juniors = juniors + 1
+		elif data[i].get("Class") == 'Sophomore':
+			sophomores = sophomores + 1
+		elif data[i].get("Class") == 'Freshman':
+			freshmen = freshmen + 1
+		i = i + 1
+	seniorTuple = ('Senior', seniors)
+	list = []
+	list.append(seniorTuple)
+	juniorTuple = ('Junior', juniors)
+	list.append(juniorTuple)
+	sophomoreTuple = ('Sophomore', sophomores)
+	list.append(sophomoreTuple)
+	freshmenTuple = ('Freshman', freshmen)
+	list.append(freshmenTuple)
 
-	pass
-
+	sortedList = sorted(list, key=lambda k: k[1], reverse=True)
+	return sortedList
 
 def findMonth(a):
-# Find the most common birth month form this data
-# Input: list of dictionaries
-# Output: Return the month (1-12) that had the most births in the data
-
-	pass
+	list = []
+	i = 0
+	while i < len(a):
+		dateComponents = (a[i].get('DOB')).split("/")
+		month = dateComponents[0]
+		list.append(month)
+		i = i + 1
+	count = collections.Counter(list)
+	return int(count.most_common(1)[0][0])
 
 def mySortPrint(a,col,fileName):
-#Similar to mySort, but instead of returning single
-#Student, the sorted data is saved to a csv file.
-# as fist,last,email
-#Input: list of dictionaries, col (key) to sort by and output file name
-#Output: No return value, but the file is written
-
-	pass
+	inFile = open(fileName, "w")
+	sortedList = sorted(a, key=lambda k: k[col])
+	i = 0
+	while i < len(sortedList):
+		toWrite = sortedList[i].get("First") + "," + sortedList[i].get("Last") + "," + sortedList[i].get("Email") + "\n"
+		inFile.write(toWrite)
+		i = i + 1
+	inFile.close()
 
 def findAge(a):
 # def findAge(a):
