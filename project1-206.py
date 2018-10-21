@@ -7,6 +7,37 @@ from datetime import date
 
 
 def getData(file):
+	inFile = open("uspoll.txt","r")
+	lines = inFile.readLines()
+	inFile.close()
+
+	#empty list for dictionary objects
+	dictList = []
+
+	#loop through lines and create dictionary objects
+	for line in lines:
+		dictObject = {}
+
+		#split at ',' and get values
+		values = line.split(",")
+		# using a single trailing underscore so as
+		# not to run into complications using 'class'
+		first_ = values[0]
+		last_ = values[1]
+		email_ = values[2]
+		class_ = values[3]
+		dob_ = values[4]
+
+		dictObject["first"] = first_
+		dictObject["last"] = last_
+		dictObject["email"] = email_
+		dictObject["course"] = class_
+		dictObject["dob"] = dob_
+		dictList.append(dictObject)
+
+	return dictList
+
+
 # get a list of dictionary objects from the file
 #Input: file name
 #Ouput: return a list of dictionary objects where
