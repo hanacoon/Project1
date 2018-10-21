@@ -7,8 +7,8 @@ from datetime import date
 
 
 def getData(file):
-	inFile = open("uspoll.txt","r")
-	lines = inFile.readLines()
+	inFile = open(file, "r")
+	lines = inFile.readlines()
 	inFile.close()
 
 	#empty list for dictionary objects
@@ -26,31 +26,25 @@ def getData(file):
 		last_ = values[1]
 		email_ = values[2]
 		class_ = values[3]
-		dob_ = values[4]
+		removeNewLines = values[4].split("\n")
+		dob_ = removeNewLines[0]
 
-		dictObject["first"] = first_
-		dictObject["last"] = last_
-		dictObject["email"] = email_
-		dictObject["course"] = class_
-		dictObject["dob"] = dob_
+		dictObject["First"] = first_
+		dictObject["Last"] = last_
+		dictObject["Email"] = email_
+		dictObject["Course"] = class_
+		dictObject["DOB"] = dob_
 		dictList.append(dictObject)
 
+	dictList.pop(0)
+	print(dictList)
 	return dictList
 
-
-# get a list of dictionary objects from the file
-#Input: file name
-#Ouput: return a list of dictionary objects where
-#the keys are from the first row in the data. and the values are each of the other rows
-
-	pass
-
 def mySort(data,col):
-# Sort based on key/column
-#Input: list of dictionaries and col (key) to sort on
-#Output: Return the first item in the sorted list as a string of just: firstName lastName
 
-	pass
+	sortedList = sorted(data, key=lambda k: k[col])
+	toReturn = sortedList[0].get("First") + " " + sortedList[0].get("Last")
+	return toReturn
 
 
 def classSizes(data):
